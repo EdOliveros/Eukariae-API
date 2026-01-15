@@ -1,14 +1,14 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {
+import {
     getBlogPosts,
     getBlogPostById,
     createBlogPost,
     updateBlogPost,
     deleteBlogPost,
-} = require('../controllers/blogController');
-const auth = require('../middleware/auth');
-const upload = require('../middleware/upload');
+} from '../controllers/blogController.js';
+import auth from '../middleware/auth.js';
+import upload from '../middleware/upload.js';
 
 router.get('/', getBlogPosts);
 router.get('/:id', getBlogPostById);
@@ -16,4 +16,4 @@ router.post('/', auth, upload.single('image'), createBlogPost);
 router.put('/:id', auth, upload.single('image'), updateBlogPost);
 router.delete('/:id', auth, deleteBlogPost);
 
-module.exports = router;
+export default router;

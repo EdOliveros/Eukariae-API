@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const siteConfigSchema = new mongoose.Schema({
     logo: {
@@ -25,4 +25,4 @@ const siteConfigSchema = new mongoose.Schema({
 
 const SiteConfig = mongoose.model('SiteConfig', siteConfigSchema);
 
-module.exports = SiteConfig;
+export default SiteConfig;

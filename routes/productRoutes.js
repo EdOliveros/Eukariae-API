@@ -1,14 +1,14 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {
+import {
     getProducts,
     getProductById,
     createProduct,
     updateProduct,
     deleteProduct,
-} = require('../controllers/productController');
-const auth = require('../middleware/auth');
-const upload = require('../middleware/upload');
+} from '../controllers/productController.js';
+import auth from '../middleware/auth.js';
+import upload from '../middleware/upload.js';
 
 router.get('/', getProducts);
 router.get('/:id', getProductById);
@@ -16,4 +16,4 @@ router.post('/', auth, upload.single('image'), createProduct);
 router.put('/:id', auth, upload.single('image'), updateProduct);
 router.delete('/:id', auth, deleteProduct);
 
-module.exports = router;
+export default router;

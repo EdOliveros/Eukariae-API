@@ -1,8 +1,12 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const path = require('path');
-const cors = require('cors');
+import express from 'express';
+import dotenv from 'dotenv';
+import connectDB from './config/db.js';
+import path from 'path';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load environment variables
 dotenv.config();
@@ -17,14 +21,19 @@ app.use(express.json());
 app.use(cors());
 
 // AdminJS
-const { adminJs, adminRouter } = require('./admin/admin.config');
+import { adminJs, adminRouter } from './admin/admin.config.js';
 app.use(adminJs.options.rootPath, adminRouter);
 
 // Routes
-app.use('/api/v1/products', require('./routes/productRoutes'));
-app.use('/api/v1/categories', require('./routes/categoryRoutes'));
-app.use('/api/v1/blog', require('./routes/blogRoutes'));
-app.use('/api/v1/config', require('./routes/configRoutes'));
+import productRoutes from './routes/productRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import blogRoutes from './routes/blogRoutes.js';
+import configRoutes from './routes/configRoutes.js';
+
+app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/categories', categoryRoutes);
+app.use('/api/v1/blog', blogRoutes);
+app.use('/api/v1/config', configRoutes);
 
 // Static folder for uploads
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

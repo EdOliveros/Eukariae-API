@@ -1,9 +1,9 @@
-const BlogPost = require('../models/BlogPost');
+import BlogPost from '../models/BlogPost.js';
 
 // @desc    Fetch all blog posts
 // @route   GET /api/v1/blog
 // @access  Public
-const getBlogPosts = async (req, res) => {
+export const getBlogPosts = async (req, res) => {
     try {
         const blogPosts = await BlogPost.find({}).sort({ createdAt: -1 });
         res.json(blogPosts);
@@ -15,7 +15,7 @@ const getBlogPosts = async (req, res) => {
 // @desc    Fetch single blog post
 // @route   GET /api/v1/blog/:id
 // @access  Public
-const getBlogPostById = async (req, res) => {
+export const getBlogPostById = async (req, res) => {
     try {
         const blogPost = await BlogPost.findById(req.params.id);
         if (blogPost) {
@@ -31,7 +31,7 @@ const getBlogPostById = async (req, res) => {
 // @desc    Create a blog post
 // @route   POST /api/v1/blog
 // @access  Private/Admin
-const createBlogPost = async (req, res) => {
+export const createBlogPost = async (req, res) => {
     try {
         const { title, content, author } = req.body;
         const image = req.file ? `/uploads/${req.file.filename}` : '';
@@ -53,7 +53,7 @@ const createBlogPost = async (req, res) => {
 // @desc    Update a blog post
 // @route   PUT /api/v1/blog/:id
 // @access  Private/Admin
-const updateBlogPost = async (req, res) => {
+export const updateBlogPost = async (req, res) => {
     try {
         const { title, content, author } = req.body;
         const blogPost = await BlogPost.findById(req.params.id);
@@ -80,7 +80,7 @@ const updateBlogPost = async (req, res) => {
 // @desc    Delete a blog post
 // @route   DELETE /api/v1/blog/:id
 // @access  Private/Admin
-const deleteBlogPost = async (req, res) => {
+export const deleteBlogPost = async (req, res) => {
     try {
         const blogPost = await BlogPost.findById(req.params.id);
         if (blogPost) {
@@ -92,12 +92,4 @@ const deleteBlogPost = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
-
-module.exports = {
-    getBlogPosts,
-    getBlogPostById,
-    createBlogPost,
-    updateBlogPost,
-    deleteBlogPost,
 };

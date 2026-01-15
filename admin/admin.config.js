@@ -1,16 +1,16 @@
-const AdminJS = require('adminjs');
-const AdminJSExpress = require('@adminjs/express');
-const AdminJSMongoose = require('@adminjs/mongoose');
-const mongoose = require('mongoose');
+import AdminJS from 'adminjs';
+import AdminJSExpress from '@adminjs/express';
+import AdminJSMongoose from '@adminjs/mongoose';
+import mongoose from 'mongoose';
 
 // Register adapter
 AdminJS.registerAdapter(AdminJSMongoose);
 
 // Load Models
-const Product = require('../models/Product');
-const Category = require('../models/Category');
-const BlogPost = require('../models/BlogPost');
-const SiteConfig = require('../models/SiteConfig');
+import Product from '../models/Product.js';
+import Category from '../models/Category.js';
+import BlogPost from '../models/BlogPost.js';
+import SiteConfig from '../models/SiteConfig.js';
 
 const adminJsOptions = {
     resources: [
@@ -41,6 +41,7 @@ const adminRouter = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
 }, null, {
     resave: false,
     saveUninitialized: true,
+    secret: 'shhh-secret', // Added secret for session
 });
 
-module.exports = { adminJs, adminRouter };
+export { adminJs, adminRouter };

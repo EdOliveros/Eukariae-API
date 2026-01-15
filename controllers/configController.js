@@ -1,9 +1,9 @@
-const SiteConfig = require('../models/SiteConfig');
+import SiteConfig from '../models/SiteConfig.js';
 
 // @desc    Get site config
 // @route   GET /api/v1/config
 // @access  Public
-const getConfig = async (req, res) => {
+export const getConfig = async (req, res) => {
     try {
         const config = await SiteConfig.findOne({});
         if (config) {
@@ -19,7 +19,7 @@ const getConfig = async (req, res) => {
 // @desc    Update site config
 // @route   PUT /api/v1/config
 // @access  Private/Admin
-const updateConfig = async (req, res) => {
+export const updateConfig = async (req, res) => {
     try {
         let config = await SiteConfig.findOne({});
         const { siteName, contactEmail, socialLinks } = req.body;
@@ -53,9 +53,4 @@ const updateConfig = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
-
-module.exports = {
-    getConfig,
-    updateConfig,
 };

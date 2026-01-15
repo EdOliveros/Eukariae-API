@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {
+import {
     getConfig,
     updateConfig,
-} = require('../controllers/configController');
-const auth = require('../middleware/auth');
-const upload = require('../middleware/upload');
+} from '../controllers/configController.js';
+import auth from '../middleware/auth.js';
+import upload from '../middleware/upload.js';
 
 router.get('/', getConfig);
 router.put('/', auth, upload.fields([
@@ -13,4 +13,4 @@ router.put('/', auth, upload.fields([
     { name: 'heroImage', maxCount: 1 }
 ]), updateConfig);
 
-module.exports = router;
+export default router;

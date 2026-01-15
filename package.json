@@ -1,6 +1,7 @@
 {
   "name": "eukariae-api",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,11 +19,12 @@
   },
   "homepage": "https://github.com/EdOliveros/Eukariae-API#readme",
   "dependencies": {
-    "@adminjs/express": "^6.1.1",
-    "@adminjs/mongoose": "^4.1.0",
-    "@adminjs/upload": "^4.0.2",
-    "adminjs": "^7.8.17",
+    "@adminjs/express": "^5.1.0",
+    "@adminjs/mongoose": "^3.0.3",
+    "@adminjs/upload": "^3.0.1",
+    "adminjs": "^6.8.7",
     "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-formidable": "^1.2.0",

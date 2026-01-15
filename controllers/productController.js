@@ -1,9 +1,9 @@
-const Product = require('../models/Product');
+import Product from '../models/Product.js';
 
 // @desc    Fetch all products
 // @route   GET /api/v1/products
 // @access  Public
-const getProducts = async (req, res) => {
+export const getProducts = async (req, res) => {
     try {
         const products = await Product.find({}).populate('category', 'name');
         res.json(products);
@@ -15,7 +15,7 @@ const getProducts = async (req, res) => {
 // @desc    Fetch single product
 // @route   GET /api/v1/products/:id
 // @access  Public
-const getProductById = async (req, res) => {
+export const getProductById = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id).populate('category', 'name');
         if (product) {
@@ -31,7 +31,7 @@ const getProductById = async (req, res) => {
 // @desc    Create a product
 // @route   POST /api/v1/products
 // @access  Private/Admin
-const createProduct = async (req, res) => {
+export const createProduct = async (req, res) => {
     try {
         const { name, price, description, category, countInStock } = req.body;
         const image = req.file ? `/uploads/${req.file.filename}` : '';
@@ -55,7 +55,7 @@ const createProduct = async (req, res) => {
 // @desc    Update a product
 // @route   PUT /api/v1/products/:id
 // @access  Private/Admin
-const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res) => {
     try {
         const { name, price, description, category, countInStock } = req.body;
         const product = await Product.findById(req.params.id);
@@ -84,7 +84,7 @@ const updateProduct = async (req, res) => {
 // @desc    Delete a product
 // @route   DELETE /api/v1/products/:id
 // @access  Private/Admin
-const deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         if (product) {
@@ -96,12 +96,4 @@ const deleteProduct = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
-
-module.exports = {
-    getProducts,
-    getProductById,
-    createProduct,
-    updateProduct,
-    deleteProduct,
 };
