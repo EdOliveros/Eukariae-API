@@ -39,6 +39,7 @@ app.use('/api/v1/config', configRoutes);
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 app.get('/', (req, res) => {
+    // Basic health check endpoint
     res.send('API is running...');
 });
 
