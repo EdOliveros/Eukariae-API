@@ -7,10 +7,11 @@ import {
     deleteCategory,
 } from '../controllers/categoryController.js';
 import auth from '../middleware/auth.js';
+import upload from '../middleware/upload.js';
 
 router.get('/', getCategories);
-router.post('/', auth, createCategory);
-router.put('/:id', auth, updateCategory);
+router.post('/', auth, upload.single('image'), createCategory);
+router.put('/:id', auth, upload.single('image'), updateCategory);
 router.delete('/:id', auth, deleteCategory);
 
 export default router;

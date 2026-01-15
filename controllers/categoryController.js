@@ -18,7 +18,8 @@ export const getCategories = async (req, res) => {
 export const createCategory = async (req, res) => {
     try {
         const { name, description } = req.body;
-        const category = new Category({ name, description });
+        const image = req.file ? req.file.filename : '';
+        const category = new Category({ name, description, image });
         const createdCategory = await category.save();
         res.status(201).json(createdCategory);
     } catch (error) {
@@ -36,6 +37,9 @@ export const updateCategory = async (req, res) => {
         if (category) {
             category.name = name || category.name;
             category.description = description || category.description;
+            if (req.file) {
+                category.image = req.file.filename;
+            }
             const updatedCategory = await category.save();
             res.json(updatedCategory);
         } else {
