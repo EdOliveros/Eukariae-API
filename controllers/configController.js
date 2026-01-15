@@ -41,10 +41,10 @@ export const updateConfig = async (req, res) => {
 
         if (req.files) {
             if (req.files.logo) {
-                config.logo = `/uploads/${req.files.logo[0].filename}`;
+                config.logo = req.files.logo[0].filename;
             }
             if (req.files.heroImage) {
-                config.heroImage = `/uploads/${req.files.heroImage[0].filename}`;
+                config.heroImage = req.files.heroImage[0].filename;
             }
         }
 
