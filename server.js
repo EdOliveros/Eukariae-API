@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import path from 'path';
 import cors from 'cors';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +21,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 // AdminJS
 import { buildAdminRouter } from './admin/admin.config.js';
 
@@ -35,7 +42,7 @@ app.use('/api/v1/blog', blogRoutes);
 app.use('/api/v1/config', configRoutes);
 
 // Static folder for uploads
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+app.use('/uploads', express.static(uploadsDir));
 
 app.get('/', (req, res) => {
     // Basic health check endpoint

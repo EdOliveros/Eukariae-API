@@ -123,7 +123,15 @@ const createAdmin = () => new AdminJS(adminJsOptions);
 
 export const buildAdminRouter = async () => {
     const adminJs = createAdmin();
-    await adminJs.initialize();
+
+    // In production, we force bundling to ensure components.bundle.js is created
+    if (process.env.NODE_ENV === 'production') {
+        await adminJs.initialize();
+    } else {
+        // In development, watch mode is usually preferred but we can still initialize
+        await adminJs.initialize();
+    }
+
     const adminRouter = buildAuthRouter(adminJs);
     return { adminJs, adminRouter };
 };
