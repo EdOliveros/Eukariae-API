@@ -6,7 +6,17 @@ import Product from '../models/Product.js';
 export const getProducts = async (req, res) => {
     try {
         const products = await Product.find({}).populate('category');
-        res.json(products);
+        const normalizedProducts = products.map(product => {
+            const prod = { ...product._doc };
+            if (prod.image && !prod.image.startsWith('http') && !prod.image.startsWith('/')) {
+                prod.image = `/uploads/${prod.image}`;
+            }
+            if (prod.category && prod.category.image && !prod.category.image.startsWith('http') && !prod.category.image.startsWith('/')) {
+                prod.category.image = `/uploads/${prod.category.image}`;
+            }
+            return prod;
+        });
+        res.json(normalizedProducts);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -19,7 +29,14 @@ export const getProductById = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id).populate('category');
         if (product) {
-            res.json(product);
+            const prod = { ...product._doc };
+            if (prod.image && !prod.image.startsWith('http') && !prod.image.startsWith('/')) {
+                prod.image = `/uploads/${prod.image}`;
+            }
+            if (prod.category && prod.category.image && !prod.category.image.startsWith('http') && !prod.category.image.startsWith('/')) {
+                prod.category.image = `/uploads/${prod.category.image}`;
+            }
+            res.json(prod);
         } else {
             res.status(404).json({ message: 'Product not found' });
         }

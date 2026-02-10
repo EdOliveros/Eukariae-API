@@ -6,7 +6,13 @@ import Category from '../models/Category.js';
 export const getCategories = async (req, res) => {
     try {
         const categories = await Category.find({});
-        res.json(categories);
+        const normalizedCategories = categories.map(cat => ({
+            ...cat._doc,
+            image: cat.image && !cat.image.startsWith('http') && !cat.image.startsWith('/')
+                ? `/uploads/${cat.image}`
+                : cat.image
+        }));
+        res.json(normalizedCategories);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

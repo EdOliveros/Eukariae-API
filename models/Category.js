@@ -14,6 +14,11 @@ const categorySchema = new mongoose.Schema({
     image: {
         type: String,
     },
+    // AdminJS upload metadata
+    imageKey: String,
+    imageBucket: String,
+    imageMime: String,
+    imageSize: Number,
 }, {
     timestamps: true,
 });

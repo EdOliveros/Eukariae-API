@@ -2,6 +2,12 @@ import AdminJS from 'adminjs';
 import AdminJSExpress from '@adminjs/express';
 import AdminJSMongoose from '@adminjs/mongoose';
 import mongoose from 'mongoose';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import uploadFeature from '@adminjs/upload';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Register adapter
 AdminJS.registerAdapter(AdminJSMongoose);
@@ -20,10 +26,26 @@ const adminJsOptions = {
                 parent: { name: 'Store', icon: 'Store' },
                 properties: {
                     image: {
-                        description: 'Link o URL de la imagen de la categoría',
-                    }
+                        description: 'Sube una imagen o pega un link/URL',
+                    },
+                    imageKey: { isVisible: false },
+                    imageBucket: { isVisible: false },
+                    imageMime: { isVisible: false },
+                    imageSize: { isVisible: false },
                 }
-            }
+            },
+            features: [
+                uploadFeature({
+                    provider: { local: { bucket: path.join(__dirname, '../uploads') } },
+                    properties: {
+                        key: 'image',
+                        mimeType: 'imageMime',
+                        size: 'imageSize',
+                        bucket: 'imageBucket',
+                    },
+                    validation: { mimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'] },
+                }),
+            ],
         },
         {
             resource: Product,
@@ -31,13 +53,27 @@ const adminJsOptions = {
                 parent: { name: 'Store', icon: 'Store' },
                 properties: {
                     image: {
-                        description: 'Link o URL de la imagen del producto',
+                        description: 'Sube una imagen o pega un link/URL',
                     },
-                    category: {
-                        isRequired: true,
-                    }
+                    category: { isRequired: true },
+                    imageKey: { isVisible: false },
+                    imageBucket: { isVisible: false },
+                    imageMime: { isVisible: false },
+                    imageSize: { isVisible: false },
                 }
-            }
+            },
+            features: [
+                uploadFeature({
+                    provider: { local: { bucket: path.join(__dirname, '../uploads') } },
+                    properties: {
+                        key: 'image',
+                        mimeType: 'imageMime',
+                        size: 'imageSize',
+                        bucket: 'imageBucket',
+                    },
+                    validation: { mimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'] },
+                }),
+            ],
         },
         { resource: BlogPost, options: { parent: { name: 'Content', icon: 'Document' } } },
         { resource: SiteConfig, options: { parent: { name: 'Settings', icon: 'Settings' } } },

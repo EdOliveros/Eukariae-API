@@ -16,8 +16,13 @@ const productSchema = new mongoose.Schema({
         default: 0,
     },
     image: {
-        type: String, // URL to the image
+        type: String, // URL or local path
     },
+    // AdminJS upload metadata
+    imageKey: String,
+    imageBucket: String,
+    imageMime: String,
+    imageSize: Number,
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
