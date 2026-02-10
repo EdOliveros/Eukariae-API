@@ -21,8 +21,7 @@ app.use(express.json());
 app.use(cors());
 
 // AdminJS
-import { adminJs, adminRouter } from './admin/admin.config.js';
-app.use(adminJs.options.rootPath, adminRouter);
+import { buildAdminRouter } from './admin/admin.config.js';
 
 // Routes
 import productRoutes from './routes/productRoutes.js';
@@ -45,6 +44,13 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+const startServer = async () => {
+    const { adminJs, adminRouter } = await buildAdminRouter();
+    app.use(adminJs.options.rootPath, adminRouter);
+
+    app.listen(PORT, () => {
+        console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    });
+};
+
+startServer();

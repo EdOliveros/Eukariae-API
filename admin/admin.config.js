@@ -1,7 +1,6 @@
 import AdminJS from 'adminjs';
 import AdminJSExpress from '@adminjs/express';
 import AdminJSMongoose from '@adminjs/mongoose';
-import mongoose from 'mongoose';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import uploadFeature from '@adminjs/upload';
@@ -105,10 +104,7 @@ const adminJsOptions = {
     componentLoader,
 };
 
-const adminJs = new AdminJS(adminJsOptions);
-
-// Authentication for AdminJS
-const adminRouter = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
+const buildAuthRouter = (adminJs) => AdminJSExpress.buildAuthenticatedRouter(adminJs, {
     authenticate: async (email, password) => {
         if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
             return { email: email };
@@ -123,4 +119,11 @@ const adminRouter = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
     secret: 'shhh-secret', // Added secret for session
 });
 
-export { adminJs, adminRouter };
+const createAdmin = () => new AdminJS(adminJsOptions);
+
+export const buildAdminRouter = async () => {
+    const adminJs = createAdmin();
+    await adminJs.initialize();
+    const adminRouter = buildAuthRouter(adminJs);
+    return { adminJs, adminRouter };
+};
