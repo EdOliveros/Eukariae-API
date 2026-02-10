@@ -9,8 +9,13 @@ import uploadFeature from '@adminjs/upload';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const adminTmpDir = process.env.ADMIN_JS_TMP_DIR || path.join('/tmp', 'adminjs');
+process.env.ADMIN_JS_TMP_DIR = adminTmpDir;
+
 // Register adapter
 AdminJS.registerAdapter(AdminJSMongoose);
+
+const componentLoader = new AdminJS.ComponentLoader();
 
 // Load Models
 import Product from '../models/Product.js';
@@ -28,6 +33,10 @@ const adminJsOptions = {
                     image: {
                         description: 'Sube una imagen o pega un link/URL',
                     },
+                    imageFile: {
+                        description: 'Sube una imagen (archivo)',
+                        isVisible: { list: false, filter: false, show: false, edit: true },
+                    },
                     imageKey: { isVisible: false },
                     imageBucket: { isVisible: false },
                     imageMime: { isVisible: false },
@@ -36,13 +45,16 @@ const adminJsOptions = {
             },
             features: [
                 uploadFeature({
+                    componentLoader,
                     provider: { local: { bucket: path.join(__dirname, '../uploads') } },
                     properties: {
+                        file: 'imageFile',
                         key: 'image',
                         mimeType: 'imageMime',
                         size: 'imageSize',
                         bucket: 'imageBucket',
                     },
+                    uploadPath: (record, filename) => `${record.id()}/${filename}`,
                     validation: { mimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'] },
                 }),
             ],
@@ -55,6 +67,10 @@ const adminJsOptions = {
                     image: {
                         description: 'Sube una imagen o pega un link/URL',
                     },
+                    imageFile: {
+                        description: 'Sube una imagen (archivo)',
+                        isVisible: { list: false, filter: false, show: false, edit: true },
+                    },
                     category: { isRequired: true },
                     imageKey: { isVisible: false },
                     imageBucket: { isVisible: false },
@@ -64,13 +80,16 @@ const adminJsOptions = {
             },
             features: [
                 uploadFeature({
+                    componentLoader,
                     provider: { local: { bucket: path.join(__dirname, '../uploads') } },
                     properties: {
+                        file: 'imageFile',
                         key: 'image',
                         mimeType: 'imageMime',
                         size: 'imageSize',
                         bucket: 'imageBucket',
                     },
+                    uploadPath: (record, filename) => `${record.id()}/${filename}`,
                     validation: { mimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'] },
                 }),
             ],
@@ -83,6 +102,7 @@ const adminJsOptions = {
         softwareBrothers: false, // hide AdminJS footer
     },
     rootPath: '/admin',
+    componentLoader,
 };
 
 const adminJs = new AdminJS(adminJsOptions);
