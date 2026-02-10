@@ -17,8 +17,8 @@ export const getCategories = async (req, res) => {
 // @access  Private/Admin
 export const createCategory = async (req, res) => {
     try {
-        const { name, description } = req.body;
-        const image = req.file ? req.file.filename : '';
+        const { name, description, image: imageUrl } = req.body;
+        const image = req.file ? `/uploads/${req.file.filename}` : (imageUrl || '');
         const category = new Category({ name, description, image });
         const createdCategory = await category.save();
         res.status(201).json(createdCategory);
@@ -32,13 +32,15 @@ export const createCategory = async (req, res) => {
 // @access  Private/Admin
 export const updateCategory = async (req, res) => {
     try {
-        const { name, description } = req.body;
+        const { name, description, image: imageUrl } = req.body;
         const category = await Category.findById(req.params.id);
         if (category) {
             category.name = name || category.name;
             category.description = description || category.description;
             if (req.file) {
-                category.image = req.file.filename;
+                category.image = `/uploads/${req.file.filename}`;
+            } else if (imageUrl !== undefined) {
+                category.image = imageUrl;
             }
             const updatedCategory = await category.save();
             res.json(updatedCategory);

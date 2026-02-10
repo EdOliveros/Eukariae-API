@@ -5,7 +5,7 @@ import Product from '../models/Product.js';
 // @access  Public
 export const getProducts = async (req, res) => {
     try {
-        const products = await Product.find({}).populate('category', 'name');
+        const products = await Product.find({}).populate('category');
         res.json(products);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -17,7 +17,7 @@ export const getProducts = async (req, res) => {
 // @access  Public
 export const getProductById = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id).populate('category', 'name');
+        const product = await Product.findById(req.params.id).populate('category');
         if (product) {
             res.json(product);
         } else {
@@ -33,8 +33,8 @@ export const getProductById = async (req, res) => {
 // @access  Private/Admin
 export const createProduct = async (req, res) => {
     try {
-        const { name, price, description, category, countInStock } = req.body;
-        const image = req.file ? `/uploads/${req.file.filename}` : '';
+        const { name, price, description, category, countInStock, image: imageUrl } = req.body;
+        const image = req.file ? `/uploads/${req.file.filename}` : (imageUrl || '');
 
         const product = new Product({
             name,
@@ -69,6 +69,8 @@ export const updateProduct = async (req, res) => {
 
             if (req.file) {
                 product.image = `/uploads/${req.file.filename}`;
+            } else if (req.body.image !== undefined) {
+                product.image = req.body.image;
             }
 
             const updatedProduct = await product.save();

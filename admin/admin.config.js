@@ -14,8 +14,31 @@ import SiteConfig from '../models/SiteConfig.js';
 
 const adminJsOptions = {
     resources: [
-        { resource: Category, options: { parent: { name: 'Store', icon: 'Store' } } },
-        { resource: Product, options: { parent: { name: 'Store', icon: 'Store' } } },
+        {
+            resource: Category,
+            options: {
+                parent: { name: 'Store', icon: 'Store' },
+                properties: {
+                    image: {
+                        description: 'Link o URL de la imagen de la categoría',
+                    }
+                }
+            }
+        },
+        {
+            resource: Product,
+            options: {
+                parent: { name: 'Store', icon: 'Store' },
+                properties: {
+                    image: {
+                        description: 'Link o URL de la imagen del producto',
+                    },
+                    category: {
+                        isRequired: true,
+                    }
+                }
+            }
+        },
         { resource: BlogPost, options: { parent: { name: 'Content', icon: 'Document' } } },
         { resource: SiteConfig, options: { parent: { name: 'Settings', icon: 'Settings' } } },
     ],
