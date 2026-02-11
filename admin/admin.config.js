@@ -8,7 +8,7 @@ import uploadFeature from '@adminjs/upload';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const adminTmpDir = process.env.ADMIN_JS_TMP_DIR || path.join('/tmp', 'adminjs');
+const adminTmpDir = path.join(__dirname, '../.adminjs');
 process.env.ADMIN_JS_TMP_DIR = adminTmpDir;
 
 // Register adapter
@@ -22,7 +22,7 @@ import Category from '../models/Category.js';
 import BlogPost from '../models/BlogPost.js';
 import SiteConfig from '../models/SiteConfig.js';
 
-const adminJsOptions = {
+export const adminJsOptions = {
     resources: [
         {
             resource: Category,
@@ -124,14 +124,10 @@ const createAdmin = () => new AdminJS(adminJsOptions);
 export const buildAdminRouter = async () => {
     const adminJs = createAdmin();
 
-    // In production, we force bundling to ensure components.bundle.js is created
-    if (process.env.NODE_ENV === 'production') {
-        await adminJs.initialize();
-    } else {
-        // In development, watch mode is usually preferred but we can still initialize
-        await adminJs.initialize();
-    }
+    // Always initialize to ensure assets are ready if they weren't pre-bundled
+    await adminJs.initialize();
 
     const adminRouter = buildAuthRouter(adminJs);
     return { adminJs, adminRouter };
 };
+export { componentLoader };
