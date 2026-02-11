@@ -1,3 +1,4 @@
+import './admin/init.js';
 import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
@@ -53,6 +54,23 @@ const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
     const { adminJs, adminRouter } = await buildAdminRouter();
+
+    // FALLBACK: Serve AdminJS bundled components manually if the middleware fails
+    // This addresses the persistent 404 / MIME type error on Render
+    // We put this BEFORE the adminRouter to bypass authentication for the bundle
+    app.get('/admin/frontend/assets/components.bundle.js', (req, res) => {
+        const bundlePath = path.join(process.env.ADMIN_JS_TMP_DIR, 'bundle.js');
+        console.log('Serving AdminJS bundle from:', bundlePath);
+        if (fs.existsSync(bundlePath)) {
+            res.type('application/javascript');
+            res.sendFile(bundlePath);
+        } else {
+            console.error('AdminJS bundle not found at:', bundlePath);
+            res.status(404).send('Bundle not found');
+        }
+    });
+
+    // AdminJS router
     app.use(adminJs.options.rootPath, adminRouter);
 
     app.listen(PORT, () => {

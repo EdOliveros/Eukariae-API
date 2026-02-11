@@ -1,3 +1,4 @@
+import './init.js';
 import AdminJS from 'adminjs';
 import AdminJSExpress from '@adminjs/express';
 import AdminJSMongoose from '@adminjs/mongoose';
@@ -7,9 +8,6 @@ import uploadFeature from '@adminjs/upload';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const adminTmpDir = path.join(__dirname, '../.adminjs');
-process.env.ADMIN_JS_TMP_DIR = adminTmpDir;
 
 // Register adapter
 AdminJS.registerAdapter(AdminJSMongoose);

@@ -1,3 +1,4 @@
+import './init.js';
 import AdminJS from 'adminjs';
 import { adminJsOptions } from './admin.config.js';
 import mongoose from 'mongoose';
@@ -15,6 +16,9 @@ const bundle = async () => {
 
     console.log('Initializing AdminJS...');
     await adminJs.initialize();
+
+    console.log('AdminJS Assets:', adminJs.options.assets);
+    console.log('AdminJS Assets Path:', adminJs.options.assetsPath);
 
     console.log('AdminJS bundling completed successfully.');
     process.exit(0);

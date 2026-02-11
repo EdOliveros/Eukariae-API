@@ -5,4 +5,4 @@ uploads/*
 dist
 build
 .DS_Store
-.adminjs
+adminjs_assets
