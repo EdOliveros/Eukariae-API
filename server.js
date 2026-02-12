@@ -80,6 +80,27 @@ const startServer = async () => {
     // AdminJS router
     app.use(adminJs.options.rootPath, adminRouter);
 
+    // Diagnostic: Check if uploads directory is writable
+    try {
+        fs.accessSync(uploadsDir, fs.constants.W_OK);
+        console.log('Diagnostic: Uploads directory is writable:', uploadsDir);
+    } catch (err) {
+        console.error('Diagnostic Error: Uploads directory is NOT writable:', err.message);
+    }
+
+    // Global Error Handler to capture 500 error stack traces
+    app.use((err, req, res, next) => {
+        console.error('--- SERVER ERROR DETECTED ---');
+        console.error('Path:', req.path);
+        console.error('Method:', req.method);
+        console.error('Stack:', err.stack);
+        console.error('-----------------------------');
+
+        if (!res.headersSent) {
+            res.status(500).send(`Internal Server Error: ${err.message}`);
+        }
+    });
+
     app.listen(PORT, () => {
         console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
     });

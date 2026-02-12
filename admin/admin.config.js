@@ -47,12 +47,14 @@ export const adminJsOptions = {
                     new: {
                         before: async (request) => {
                             console.log('AdminJS: Creating new Category...');
+                            if (request.payload) console.log('Payload keys:', Object.keys(request.payload));
                             return request;
                         },
                     },
                     edit: {
                         before: async (request) => {
                             console.log(`AdminJS: Editing Category ${request.params.recordId}...`);
+                            if (request.payload) console.log('Payload keys:', Object.keys(request.payload));
                             return request;
                         },
                     },
@@ -96,12 +98,14 @@ export const adminJsOptions = {
                     new: {
                         before: async (request) => {
                             console.log('AdminJS: Creating new Product...');
+                            if (request.payload) console.log('Payload keys:', Object.keys(request.payload));
                             return request;
                         },
                     },
                     edit: {
                         before: async (request) => {
                             console.log(`AdminJS: Editing Product ${request.params.recordId}...`);
+                            if (request.payload) console.log('Payload keys:', Object.keys(request.payload));
                             return request;
                         },
                     },
