@@ -91,12 +91,6 @@ export const adminJsOptions = {
                         isVisible: { list: false, filter: false, show: false, edit: true },
                     },
                     category: { isRequired: true },
-                    specifications: {
-                        props: {
-                            name: { label: 'Nombre' },
-                            value: { label: 'Valor' },
-                        },
-                    },
                     imageKey: { isVisible: false },
                     imageBucket: { isVisible: false },
                     imageMime: { isVisible: false },
