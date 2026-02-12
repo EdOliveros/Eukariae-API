@@ -63,7 +63,7 @@ export const adminJsOptions = {
             features: [
                 uploadFeature({
                     componentLoader,
-                    provider: { local: { bucket: path.join(__dirname, '../uploads') } },
+                    provider: { local: { bucket: path.join(process.cwd(), 'uploads') } },
                     properties: {
                         file: 'imageFile',
                         key: 'image',
@@ -71,7 +71,7 @@ export const adminJsOptions = {
                         size: 'imageSize',
                         bucket: 'imageBucket',
                     },
-                    uploadPath: (record, filename) => `${record.id()}/${filename}`,
+                    uploadPath: (record, filename) => filename,
                     validation: { mimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'] },
                 }),
             ],
@@ -114,7 +114,7 @@ export const adminJsOptions = {
             features: [
                 uploadFeature({
                     componentLoader,
-                    provider: { local: { bucket: path.join(__dirname, '../uploads') } },
+                    provider: { local: { bucket: path.join(process.cwd(), 'uploads') } },
                     properties: {
                         file: 'imageFile',
                         key: 'image',
@@ -122,7 +122,7 @@ export const adminJsOptions = {
                         size: 'imageSize',
                         bucket: 'imageBucket',
                     },
-                    uploadPath: (record, filename) => `${record.id()}/${filename}`,
+                    uploadPath: (record, filename) => filename,
                     validation: { mimeTypes: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'] },
                 }),
             ],
