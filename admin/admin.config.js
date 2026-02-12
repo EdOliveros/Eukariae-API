@@ -38,7 +38,21 @@ export const adminJsOptions = {
                     imageBucket: { isVisible: false },
                     imageMime: { isVisible: false },
                     imageSize: { isVisible: false },
-                }
+                },
+                actions: {
+                    new: {
+                        before: async (request) => {
+                            console.log('AdminJS: Creating new Category...');
+                            return request;
+                        },
+                    },
+                    edit: {
+                        before: async (request) => {
+                            console.log(`AdminJS: Editing Category ${request.params.recordId}...`);
+                            return request;
+                        },
+                    },
+                },
             },
             features: [
                 uploadFeature({
@@ -73,7 +87,21 @@ export const adminJsOptions = {
                     imageBucket: { isVisible: false },
                     imageMime: { isVisible: false },
                     imageSize: { isVisible: false },
-                }
+                },
+                actions: {
+                    new: {
+                        before: async (request) => {
+                            console.log('AdminJS: Creating new Product...');
+                            return request;
+                        },
+                    },
+                    edit: {
+                        before: async (request) => {
+                            console.log(`AdminJS: Editing Product ${request.params.recordId}...`);
+                            return request;
+                        },
+                    },
+                },
             },
             features: [
                 uploadFeature({
@@ -110,11 +138,17 @@ const buildAuthRouter = (adminJs) => AdminJSExpress.buildAuthenticatedRouter(adm
         return null;
     },
     cookieName: 'adminjs',
-    cookiePassword: 'some-secret-password-used-to-secure-cookie',
-}, null, {
+    cookiePassword: process.env.COOKIE_PASSWORD || 'super-secret-password-at-least-32-chars-long',
+}, {
     resave: false,
     saveUninitialized: true,
-    secret: 'shhh-secret', // Added secret for session
+    secret: process.env.SESSION_SECRET || 'another-secret-at-least-32-chars', // Added secret for session
+    proxy: true,
+    cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    },
 });
 
 const createAdmin = () => new AdminJS(adminJsOptions);

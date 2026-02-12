@@ -18,9 +18,16 @@ connectDB();
 
 const app = express();
 
-// Middleware
-app.use(express.json());
-app.use(cors());
+// Trust proxy for Render/Heroku etc
+app.set('trust proxy', 1);
+
+// Middleware - Apply body-parsers only to API routes to avoid conflict with AdminJS multipart parsing
+app.use('/api', express.json({ limit: '50mb' }));
+app.use('/api', express.urlencoded({ limit: '50mb', extended: true }));
+app.use(cors({
+    origin: true,
+    credentials: true,
+}));
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads');
