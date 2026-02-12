@@ -29,11 +29,14 @@ app.use(cors({
     credentials: true,
 }));
 
-// Ensure uploads directory exists
+// Ensure uploads and temp directories exist
 const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
-}
+const tempDir = path.join(uploadsDir, 'tmp');
+[uploadsDir, tempDir].forEach(dir => {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+});
 
 // AdminJS
 import { buildAdminRouter } from './admin/admin.config.js';

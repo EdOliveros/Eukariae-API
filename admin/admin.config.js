@@ -161,6 +161,9 @@ const buildAuthRouter = (adminJs) => {
             secure: process.env.NODE_ENV === 'production',
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         },
+    }, {
+        // EXDEV fix: set uploadDir to a folder on the same partition/filesystem
+        uploadDir: path.join(process.cwd(), 'uploads/tmp'),
     });
 };
 
