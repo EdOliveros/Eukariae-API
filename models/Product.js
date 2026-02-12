@@ -1,5 +1,10 @@
 import mongoose from 'mongoose';
 
+const specificationSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    value: { type: String, required: true },
+}, { _id: false });
+
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -33,10 +38,7 @@ const productSchema = new mongoose.Schema({
         required: true,
         default: 0,
     },
-    specifications: [{
-        name: { type: String, required: true },
-        value: { type: String, required: true },
-    }],
+    specifications: [specificationSchema],
 }, {
     timestamps: true,
 });
