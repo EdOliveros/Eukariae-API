@@ -1,14 +1,16 @@
 import './init.js';
-import AdminJS from 'adminjs';
-import AdminJSExpressImport from '@adminjs/express';
-import AdminJSMongoose from '@adminjs/mongoose';
+import { AdminJS, ComponentLoader } from 'adminjs';
+import * as AdminJSExpressImport from '@adminjs/express';
+import * as AdminJSMongooseImport from '@adminjs/mongoose';
+
+// Handle both default and named imports for AdminJSExpress and AdminJSMongoose
+const AdminJSExpress = AdminJSExpressImport.default || AdminJSExpressImport;
+const AdminJSMongoose = AdminJSMongooseImport.default || AdminJSMongooseImport;
 import path from 'path';
 import { fileURLToPath } from 'url';
 import uploadFeature from '@adminjs/upload';
 import express from 'express';
 
-// Handle both default and named imports for AdminJSExpress
-const AdminJSExpress = AdminJSExpressImport.default || AdminJSExpressImport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,7 +18,7 @@ const __dirname = path.dirname(__filename);
 // Register adapter
 AdminJS.registerAdapter(AdminJSMongoose);
 
-const componentLoader = new AdminJS.ComponentLoader();
+const componentLoader = new ComponentLoader();
 
 // Load Models
 import Product from '../models/Product.js';
