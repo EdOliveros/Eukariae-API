@@ -1,10 +1,14 @@
 import './init.js';
 import AdminJS from 'adminjs';
-import AdminJSExpress from '@adminjs/express';
+import AdminJSExpressImport from '@adminjs/express';
 import AdminJSMongoose from '@adminjs/mongoose';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import uploadFeature from '@adminjs/upload';
+import express from 'express';
+
+// Handle both default and named imports for AdminJSExpress
+const AdminJSExpress = AdminJSExpressImport.default || AdminJSExpressImport;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -130,26 +134,31 @@ export const adminJsOptions = {
     componentLoader,
 };
 
-const buildAuthRouter = (adminJs) => AdminJSExpress.buildAuthenticatedRouter(adminJs, {
-    authenticate: async (email, password) => {
-        if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-            return { email: email };
-        }
-        return null;
-    },
-    cookieName: 'adminjs',
-    cookiePassword: process.env.COOKIE_PASSWORD || 'super-secret-password-at-least-32-chars-long',
-}, {
-    resave: false,
-    saveUninitialized: true,
-    secret: process.env.SESSION_SECRET || 'another-secret-at-least-32-chars', // Added secret for session
-    proxy: true,
-    cookie: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    },
-});
+const buildAuthRouter = (adminJs) => {
+    // Explicitly create an express router to pass to AdminJSExpress
+    const router = express.Router();
+
+    return AdminJSExpress.buildAuthenticatedRouter(adminJs, {
+        authenticate: async (email, password) => {
+            if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+                return { email: email };
+            }
+            return null;
+        },
+        cookieName: 'adminjs',
+        cookiePassword: process.env.COOKIE_PASSWORD || 'super-secret-password-at-least-32-chars-long',
+    }, router, {
+        resave: false,
+        saveUninitialized: true,
+        secret: process.env.SESSION_SECRET || 'another-secret-at-least-32-chars', // Added secret for session
+        proxy: true,
+        cookie: {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        },
+    });
+};
 
 const createAdmin = () => new AdminJS(adminJsOptions);
 
